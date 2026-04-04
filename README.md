@@ -43,15 +43,15 @@ To maintain a strict Separation of Concerns, the API and the UI must be run conc
 ### **1\. The Backend (Avatar-Director)**
 
 1. Navigate to the backend directory: cd backend  
-3. Create a .env file and add your AI key:
+2. Create a .env file and add your AI key:
    ```bash
    GROQ_API_KEY=your_key_here  
-5. **Run via Docker (Recommended):**
+3. **Run via Docker (Recommended):**
    ```bash
    docker build -t avatar-backend .
    docker run -p 7860:7860 -v "${PWD}:/app" --name avatar-director avatar-backend
 
-**Manual Run (Alternative):**
+### 1. **Manual Run (Alternative):**
 ```bash
 python -m venv venv
 # Activate: .\venv\Scripts\activate (Win) or source venv/bin/activate (Mac/Linux)
