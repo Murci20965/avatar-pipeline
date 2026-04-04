@@ -6,53 +6,51 @@ This document serves as the technical blueprint for the **Avatar-Pipeline** prot
 
 The pipeline follows a decoupled **"Director & Marionette"** architecture. Instead of generating 3D files dynamically (which is currently too slow for real-time interaction), the system uses an AI "Director" to rigidly control a pre-rigged WebGL "Marionette."
 
-mermaid  
-\`\`\`  
-graph TD  
-    %% Global Styles  
-    classDef user fill:\#f9f9f9,stroke:\#333,stroke-width:2px;  
-    classDef frontend fill:\#e1f5fe,stroke:\#01579b,stroke-width:2px;  
-    classDef backend fill:\#e8f5e9,stroke:\#2e7d32,stroke-width:2px;  
-    classDef external fill:\#fff3e0,stroke:\#ef6c00,stroke-width:2px,stroke-dasharray: 5 5;
+```mermaid
+graph TD
+    %% Global Styles
+    classDef user fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef backend fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef external fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,stroke-dasharray: 5 5;
 
-    %% Nodes  
-    Learner((Learner)):::user  
-      
-    subgraph "Frontend: Avatar-UI (Next.js 16.2)"  
-        UI\[Tailwind Interface\]:::frontend  
-        Store\[React State / Animation Hooks\]:::frontend  
-        Canvas\["WebGL Canvas \<br/\> (R3F / Drei)"\]:::frontend  
-        Model\["RobotExpressive.glb \<br/\> (14 Baked Tracks)"\]:::frontend  
+    %% Nodes
+    Learner((Learner)):::user
+    
+    subgraph "Frontend: Avatar-UI (Next.js 16.2)"
+        UI["Tailwind Interface"]:::frontend
+        Store["React State / Animation Hooks"]:::frontend
+        Canvas["WebGL Canvas<br/>(R3F / Drei)"]:::frontend
+        Model["RobotExpressive.glb<br/>(14 Baked Tracks)"]:::frontend
     end
 
-    subgraph "Backend: Avatar-Director (Docker / FastAPI)"  
-        API\[FastAPI Endpoint: /animate\]:::backend  
-        Validator\[Pydantic Schema Validation\]:::backend  
-        Prompt\[System Instruction: Classification Mode\]:::backend  
+    subgraph "Backend: Avatar-Director (Docker / FastAPI)"
+        API["FastAPI Endpoint: /animate"]:::backend
+        Validator["Pydantic Schema Validation"]:::backend
+        Prompt["System Instruction: Classification Mode"]:::backend
     end
 
-    subgraph "Intelligence: AI Engine"  
-        Groq\[Groq: Llama-3.3-70b-versatile\]:::external  
+    subgraph "Intelligence: AI Engine"
+        Groq["Groq: Llama-3.3-70b-versatile"]:::external
     end
 
-    %% Flow Connections  
-    Learner \-- "Unstructured Command \<br/\> 'Give me a thumbs up'" \--\> UI  
-    UI \-- "POST {text: ...}" \--\> API  
-      
-    API \-- "Context \+ Literal Constraints" \--\> Prompt  
-    Prompt \-- "JSON Request" \--\> Groq  
-      
-    Groq \-- "{'animation': 'ThumbsUp'}" \--\> Validator  
-    Validator \-- "Validated JSON Response" \--\> UI  
-      
-    UI \-- "Update currentAnim State" \--\> Store  
-    Store \-- "AnimationMixer.crossFade(0.5s)" \--\> Canvas  
-    Canvas \-- "Update Skeletal Bones" \--\> Model  
-    Model \-- "Visual Feedback" \--\> Learner
+    %% Flow Connections
+    Learner -->|"Unstructured Command<br/>'Give me a thumbs up'"| UI
+    UI -->|"POST {text: ...}"| API
+    
+    API -->|"Context + Literal Constraints"| Prompt
+    Prompt -->|"JSON Request"| Groq
+    
+    Groq -->|"{'animation': 'ThumbsUp'}"| Validator
+    Validator -->|"Validated JSON Response"| UI
+    
+    UI -->|"Update currentAnim State"| Store
+    Store -->|"AnimationMixer.crossFade(0.5s)"| Canvas
+    Canvas -->|"Update Skeletal Bones"| Model
+    Model -->|"Visual Feedback"| Learner
 
-    %% Layout Hints  
-    UI \-.-\> Canvas  
-\`\`\`
+    UI -.-> Canvas
+```
 
 ### **The AI Logic ("Direct Engine Coupling")**
 
