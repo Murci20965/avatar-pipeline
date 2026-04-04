@@ -42,35 +42,29 @@ To maintain a strict Separation of Concerns, the API and the UI must be run conc
 
 ### **1\. The Backend (Avatar-Director)**
 
-1. Navigate to the backend directory:
-   ```bash
-   cd backend  
+1. Navigate to the backend directory: cd backend  
 3. Create a .env file and add your AI key:
    ```bash
    GROQ_API_KEY=your_key_here  
 5. **Run via Docker (Recommended):**
    ```bash
-   docker build \-t avatar-backend .  
-   docker run \-p 7860:7860 \-v "${PWD}:/app" \--name avatar-director avatar-backend
+   docker build -t avatar-backend .
+   docker run -p 7860:7860 -v "${PWD}:/app" --name avatar-director avatar-backend
 
 **Manual Run (Alternative):**
 ```bash
-python \-m venv venv  
-\# Activate: .\\venv\\Scripts\\activate (Win) or source venv/bin/activate (Mac/Linux)  
-pip install \-r requirements.txt  
-uvicorn app.main:app \--host 0.0.0.0 \--port 7860 \--reload
+python -m venv venv
+# Activate: .\venv\Scripts\activate (Win) or source venv/bin/activate (Mac/Linux)
+pip install -r requirements.txt
+uvicorn app.main:app --host 0.0.0.0 --port 7860 --reload
 ```
 
 **Health Check:** Visit http://localhost:7860/
 
 ### **2\. The Frontend (Avatar-UI)**
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd frontend  
-3. Create a .env.local file and link the API:
-   ```bash
-   NEXT\_PUBLIC\_API\_URL=http://localhost:7860  
+1. Navigate to the frontend directory: cd frontend  
+3. Create a .env.local file and link the API: NEXT_PUBLIC_API_URL=http://localhost:7860
 5. Install dependencies and run Turbopack:
 ```bash
 npm install  
