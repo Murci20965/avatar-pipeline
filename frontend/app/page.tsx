@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, Suspense } from "react";
-import { Send, Zap, Mouse, Loader2, MousePointer2, MoveVertical } from "lucide-react";
+import { Send, Zap, Mouse, Loader2, Box, MousePointer2, MoveVertical } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, Html, useProgress } from "@react-three/drei";
@@ -25,18 +25,28 @@ function CanvasLoader() {
   );
 }
 
+// Exactly 14 prompts engineered to trigger the 14 specific Robot states
 const EXAMPLES =[
-  "Wave hello to the class!",
-  "I passed the safety test!",
-  "Critical system failure!",
-  "Should I touch the exposed wire?",
-  "Have a seat and rest."
+  "Wave hello to the class!",              // Triggers: Wave
+  "I completed the safety check!",         // Triggers: ThumbsUp
+  "Do you understand the instructions?",   // Triggers: Yes
+  "Should I touch the exposed wire?",      // Triggers: No
+  "Walk forward slowly.",                  // Triggers: Walking
+  "Run away quickly!",                     // Triggers: Running
+  "Smash the barrier!",                    // Triggers: Punch
+  "I passed the test, let's celebrate!",   // Triggers: Dance
+  "Have a seat and rest.",                 // Triggers: Sitting
+  "Get up on your feet.",                  // Triggers: Standing
+  "Jump over the obstacle!",               // Triggers: Jump
+  "Dodge that moving hazard!",             // Triggers: WalkJump
+  "Critical system failure!",              // Triggers: Death
+  "Just stand by and wait."                // Triggers: Idle
 ];
 
 export default function AvatarPipeline() {
   const [command, setCommand] = useState("");
   const [loading, setLoading] = useState(false);
-  const[currentAnimation, setCurrentAnimation] = useState("Idle");
+  const [currentAnimation, setCurrentAnimation] = useState("Idle");
   const [explanation, setExplanation] = useState("Awaiting your command...");
   
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -68,7 +78,7 @@ export default function AvatarPipeline() {
 
       timerRef.current = setTimeout(() => {
         setCurrentAnimation("Idle");
-        setExplanation("Action completed. Standing by for next command.");
+        setExplanation("Action completed. Standing by for next prompt.");
       }, 5000);
 
     } catch (error) {
@@ -86,14 +96,13 @@ export default function AvatarPipeline() {
   };
 
   return (
-    <main className="relative w-full h-screen bg-gradient-to-b from-zinc-600 to-zinc-950 overflow-hidden">
+    <main className="relative w-full h-screen bg-gradient-to-b from-zinc-700 to-zinc-950 overflow-hidden">
       
       {/* 3D WebGL Canvas Layer */}
       <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position:[-0.8, 2, 5], fov: 50 }}>
+        <Canvas camera={{ position: [-0.8, 2, 5], fov: 50 }}>
           <ambientLight intensity={0.5} />
           <Environment preset="city" />
-          
           <OrbitControls enablePan={false} maxPolarAngle={Math.PI / 2} target={[-0.8, 0, 0]} />
           
           <Suspense fallback={<CanvasLoader />}>
@@ -102,37 +111,53 @@ export default function AvatarPipeline() {
         </Canvas>
       </div>
 
-      {/* FULL HEIGHT LEFT SIDEBAR: The Transparent Glass Panel */}
-      <div className="absolute top-0 left-0 w-80 h-full bg-zinc-950/30 backdrop-blur-md border-r border-zinc-800/50 p-6 pt-12 flex flex-col gap-8 z-10 pointer-events-auto overflow-y-auto shadow-2xl">
+      {/* LEFT SIDEBAR: Solid Studio Theme */}
+      <div className="absolute top-0 left-0 w-[340px] h-full bg-[#0b0c10] border-r border-zinc-800/50 p-7 flex flex-col gap-7 z-10 pointer-events-auto shadow-2xl">
         
-        <div>
-          <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">System State</h2>
-          <div className="px-4 py-2 bg-blue-500/10 text-blue-400 font-mono text-sm rounded-lg border border-blue-500/30 flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${loading ? 'bg-yellow-400 animate-ping' : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]'}`}></div>
-            {currentAnimation}
+        {/* Header Section */}
+        <div className="flex items-center gap-3 mb-2">
+          <div className="text-blue-500">
+            <Box size={32} strokeWidth={2.5} />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-white font-extrabold text-xl leading-none tracking-wide">Avatar-3D</h1>
+            <p className="text-zinc-500 text-[10px] font-bold tracking-widest mt-1">INTERACTION PIPELINE</p>
           </div>
         </div>
 
+        <hr className="border-zinc-800/50 -mx-7" />
+
+        {/* System State Box */}
         <div>
-          <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-2">AI Logic</h2>
-          <p className="text-zinc-200 text-sm leading-relaxed font-light">
-            {explanation}
-          </p>
+          <h2 className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-3">System State</h2>
+          <div className="px-5 py-3.5 bg-[#101726] border border-[#1d283a] rounded-xl flex items-center gap-3">
+            <div className={`w-2.5 h-2.5 rounded-full ${loading ? 'bg-yellow-400 animate-ping' : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,1)]'}`}></div>
+            <span className="text-blue-400 font-bold text-sm tracking-wide">{currentAnimation}</span>
+          </div>
         </div>
 
-        <hr className="border-zinc-800/50" />
-
+        {/* AI Logic Box */}
         <div>
-          <h2 className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-4 flex items-center gap-1">
-            <Zap size={14} className="text-yellow-500" /> Quick Commands
+          <h2 className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-3">LLAMA 3.3 LOGIC</h2>
+          <div className="bg-[#15171b] border border-zinc-800/80 rounded-xl p-5 min-h-[110px] shadow-inner">
+            <p className="text-zinc-400 text-[13px] leading-relaxed">
+              {explanation}
+            </p>
+          </div>
+        </div>
+
+        {/* Quick Prompts List (Scrollable) */}
+        <div className="flex-1 flex flex-col min-h-0 mt-2">
+          <h2 className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
+            <Zap size={14} className="text-yellow-600" /> Quick Prompts
           </h2>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5 overflow-y-auto pr-2 pb-6">
             {EXAMPLES.map((ex, idx) => (
               <button
                 key={idx}
                 onClick={() => submitCommand(ex)}
                 disabled={loading}
-                className="text-left text-xs bg-zinc-900/40 hover:bg-zinc-800/60 text-zinc-300 py-3 px-4 rounded-xl border border-zinc-700/30 transition-all disabled:opacity-50 hover:border-zinc-600/50 hover:shadow-lg"
+                className="text-left text-[13px] bg-[#15171b] hover:bg-[#1d2025] text-zinc-300 py-4 px-5 rounded-xl border border-zinc-800/80 transition-colors disabled:opacity-50 font-medium tracking-wide"
               >
                 "{ex}"
               </button>
@@ -153,29 +178,34 @@ export default function AvatarPipeline() {
           </div>
         </div>
 
-      {/* BOTTOM OFFSET CENTER: Input Form */}
-      <div className="absolute bottom-8 left-[calc(50%+10rem)] -translate-x-1/2 w-full max-w-2xl px-4 z-10 pointer-events-none">
-        <div className="bg-zinc-950/40 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-2 shadow-2xl flex gap-2 w-full pointer-events-auto">
-          <form onSubmit={handleFormSubmit} className="flex flex-1 gap-2">
+      {/* BOTTOM CENTER: Unified Command Bar */}
+      <div className="absolute bottom-8 left-[340px] right-0 flex justify-center z-10 pointer-events-none px-8">
+        
+        <div className="w-full max-w-2xl pointer-events-auto">
+          <form 
+            onSubmit={handleFormSubmit} 
+            className="flex items-center gap-2 bg-[#09090b]/95 backdrop-blur-md border border-zinc-800/80 rounded-2xl p-1.5 shadow-2xl w-full"
+          >
             <input
               type="text"
               value={command}
               onChange={(e) => setCommand(e.target.value)}
-              placeholder="Type a custom scenario..."
-              className="flex-1 bg-zinc-900/50 text-zinc-100 placeholder:text-zinc-500 border border-zinc-700/50 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
               disabled={loading}
+              placeholder="Type a command to animate the 3D avatar..."
+              className="flex-1 bg-transparent border-none outline-none text-sm text-zinc-200 px-3 py-2 placeholder:text-zinc-600 disabled:opacity-50"
             />
-            <button
+            
+            <button 
               type="submit"
               disabled={loading || !command.trim()}
-              className="bg-blue-600/90 hover:bg-blue-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 text-white p-3 rounded-xl transition-all flex items-center justify-center min-w-[52px] backdrop-blur-sm border border-blue-500/50 disabled:border-transparent"
+              className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white p-3 rounded-xl transition-colors shadow-lg shadow-blue-900/20 flex items-center justify-center min-w-[48px]"
             >
-              <Send size={18} />
+              <Send className="w-5 h-5" />
             </button>
           </form>
         </div>
-      </div>
 
+      </div>
     </main>
   );
 }

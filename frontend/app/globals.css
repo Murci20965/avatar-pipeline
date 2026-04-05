@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+/* The Dark Canvas */
+body {
+  @apply bg-zinc-950 text-zinc-50 overflow-hidden h-screen w-screen m-0 antialiased;
+}
+
+/* Custom Scrollbar for the Quick Prompts */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46; /* zinc-700 */
+  border-radius: 10px;
+  border: 2px solid #0b0c10; /* Adds padding around the thumb */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b; /* zinc-600 */
+}
