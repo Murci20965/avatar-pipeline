@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, Suspense } from "react";
-import { Send, Zap, Mouse, Loader2 } from "lucide-react";
+import { Send, Zap, Mouse, Loader2, MousePointer2, MoveVertical } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, Html, useProgress } from "@react-three/drei";
@@ -141,21 +141,22 @@ export default function AvatarPipeline() {
         </div>
       </div>
 
-      {/* BOTTOM RIGHT: Interaction Guide */}
-      <div className="absolute bottom-8 right-8 z-10 pointer-events-none flex flex-col items-end gap-2 text-xs text-zinc-400 opacity-60">
-        <div className="flex items-center gap-2 bg-zinc-950/30 backdrop-blur-sm px-3 py-2 rounded-full border border-zinc-800/30">
-          <Mouse size={14} />
-          <span>Click & Drag to Rotate</span>
+      {/* TOP RIGHT HELPERS */}
+        <div className="absolute top-8 right-8 flex flex-col gap-3 z-10 pointer-events-none">
+          <div className="flex items-center gap-2 text-zinc-600 text-xs font-medium bg-zinc-900/30 px-3 py-1.5 rounded-full backdrop-blur-sm border border-zinc-800/50 shadow-sm">
+            <MousePointer2 className="w-3.5 h-3.5" />
+            <span>Click & Drag to Rotate</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-600 text-xs font-medium bg-zinc-900/30 px-3 py-1.5 rounded-full backdrop-blur-sm border border-zinc-800/50 shadow-sm">
+            <MoveVertical className="w-3.5 h-3.5" />
+            <span>Scroll to Zoom</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 bg-zinc-950/30 backdrop-blur-sm px-3 py-2 rounded-full border border-zinc-800/30">
-          <span className="font-mono text-[14px] leading-none">↕</span>
-          <span>Scroll to Zoom</span>
-        </div>
-      </div>
 
       {/* BOTTOM OFFSET CENTER: Input Form */}
-      <div className="absolute bottom-8 left-[calc(50%+4rem)] -translate-x-1/2 w-full max-w-2xl px-4 z-10 pointer-events-none">
-        <form onSubmit={handleFormSubmit} className="bg-zinc-950/40 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-2 shadow-2xl flex gap-2 w-full pointer-events-auto">
+      <div className="absolute bottom-8 left-[calc(50%+10rem)] -translate-x-1/2 w-full max-w-2xl px-4 z-10 pointer-events-none">
+        <div className="bg-zinc-950/40 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-2 shadow-2xl flex gap-2 w-full pointer-events-auto">
+          <form onSubmit={handleFormSubmit} className="flex flex-1 gap-2">
             <input
               type="text"
               value={command}
@@ -173,6 +174,7 @@ export default function AvatarPipeline() {
             </button>
           </form>
         </div>
+      </div>
 
     </main>
   );
