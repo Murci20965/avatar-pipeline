@@ -77,7 +77,6 @@ export default function AvatarPipeline() {
 
       timerRef.current = setTimeout(() => {
         setCurrentAnimation("Idle");
-        setExplanation("Action completed. Standing by for next prompt.");
       }, 5000);
 
     } catch (error) {
