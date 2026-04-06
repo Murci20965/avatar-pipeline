@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, Suspense } from "react";
-import { Send, Zap, Mouse, Loader2, Box, MousePointer2, MoveVertical } from "lucide-react";
+import { Send, Zap, Mouse, Loader2, Box, MoveVertical } from "lucide-react";
 import dynamic from "next/dynamic";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, Html, useProgress } from "@react-three/drei";
@@ -167,7 +167,7 @@ export default function AvatarPipeline() {
       {/* TOP RIGHT HELPERS */}
         <div className="absolute top-8 right-8 flex flex-col gap-3 z-10 pointer-events-none">
           <div className="flex items-center gap-2 text-zinc-600 text-xs font-medium bg-zinc-900/30 px-3 py-1.5 rounded-full backdrop-blur-sm border border-zinc-800/50 shadow-sm">
-            <MousePointer2 className="w-3.5 h-3.5" />
+            <Mouse className="w-3.5 h-3.5" />
             <span>Click & Drag to Rotate</span>
           </div>
           <div className="flex items-center gap-2 text-zinc-600 text-xs font-medium bg-zinc-900/30 px-3 py-1.5 rounded-full backdrop-blur-sm border border-zinc-800/50 shadow-sm">
