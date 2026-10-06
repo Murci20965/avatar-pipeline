@@ -2,7 +2,7 @@
 
 This repository contains the **Avatar-Pipeline**, an advanced interactive prototype developed for the NexEra AI Engineer assessment (Test 2). It successfully bridges the gap between unstructured human natural language and real-time 3D WebGL skeletal animation.
 
-**Technical Deep Dive:** For a comprehensive explanation of the architecture, AI logic, engineering challenges, and scaling plans, please see [**backend/Architecture.md**](http://docs.google.com/backend/Architecture.md).
+**Technical Deep Dive:** For a comprehensive explanation of the architecture, AI logic, engineering challenges, and scaling plans, please see [**backend/Architecture.md**](backend/Architecture.md).
 
 ## **🚀 Project Overview & Assessment Delivery**
 
@@ -10,7 +10,7 @@ This repository contains the **Avatar-Pipeline**, an advanced interactive protot
 
 **What the user does:**
 
-* Learner types an unstructured command (e.g., *"Show me how to inspect the equipment"*) or clicks a predefined Quick Command hotkey.  
+* Learner types an unstructured command (e.g., *"Show me how to inspect the equipment"*) or clicks one of the predefined Quick Prompts.  
 * Uses mouse to orbit and zoom the 3D camera.
 
 **What the system does:**
@@ -42,16 +42,20 @@ To maintain a strict Separation of Concerns, the API and the UI must be run conc
 
 ### **1\. The Backend (Avatar-Director)**
 
-1. Navigate to the backend directory: cd backend  
-2. Create a .env file and add your AI key:
+1. Navigate to the backend directory: `cd backend`
+2. Create a `.env` file and add your AI key:
    ```bash
-   GROQ_API_KEY=your_key_here  
+   GROQ_API_KEY=your_key_here
+   ```
 3. **Run via Docker (Recommended):**
    ```bash
    docker build -t avatar-backend .
    docker run -p 7860:7860 -v "${PWD}:/app" --name avatar-director avatar-backend
+   ```
+   The `-v` mount is required: the image installs the dependencies, and the mount supplies the
+   source code and your `.env`.
 
-### 1. **Manual Run (Alternative):**
+**Manual Run (Alternative):**
 ```bash
 python -m venv venv
 # Activate: .\venv\Scripts\activate (Win) or source venv/bin/activate (Mac/Linux)
@@ -63,9 +67,9 @@ uvicorn app.main:app --host 0.0.0.0 --port 7860 --reload
 
 ### **2\. The Frontend (Avatar-UI)**
 
-1. Navigate to the frontend directory: cd frontend  
-3. Create a .env.local file and link the API: NEXT_PUBLIC_API_URL=http://localhost:7860
-5. Install dependencies and run Turbopack:
+1. Navigate to the frontend directory: `cd frontend`
+2. Create a `.env.local` file and link the API: `NEXT_PUBLIC_API_URL=http://localhost:7860`
+3. Install dependencies and run Turbopack:
 ```bash
 npm install  
 npm run dev
