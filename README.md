@@ -76,6 +76,18 @@ npm run dev
 ```
 **Application:** Visit http://localhost:3000
 
+## **🛡️ Limits**
+
+Every `/animate` call spends Groq credits, so the API caps them in-process
+(`backend/app/core/rate_limit.py`): **20 requests per minute per client** (best effort, keyed on
+the proxy-appended address) and **900 per day in total**, which stays under Groq's free tier of
+1,000 requests a day whatever a caller claims to be. Over a limit, the API answers `429` and the
+UI says the coach is busy. CORS only admits the live UI; note that CORS stops other websites'
+browsers, not scripts, which is why the caps exist.
+
+**Tests:** `cd backend && pip install -r requirements.txt pytest httpx && python -m pytest tests`
+(the LLM call is stubbed, so no credits are used).
+
 ## **🚧 Limitations & Next Steps**
 
 * **LLM Latency:** Currently, requests take \~500ms \- 800ms to resolve via Groq. While incredibly fast for an LLM, this latency is noticeable in a real-time 3D environment. **Next Step:** Implement local Vector routing (Cosine Similarity) to bypass the LLM for common commands, dropping latency to \<50ms.  

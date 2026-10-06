@@ -68,7 +68,13 @@ export default function AvatarPipeline() {
         body: JSON.stringify({ command: cmdText }),
       });
 
-      if (!response.ok) throw new Error("Network response failed");
+      if (response.status === 429) {
+        const body = await response.json().catch(() => ({}));
+        setExplanation(body.detail || "The coach is busy right now. Try again in a minute.");
+        setCurrentAnimation("Idle");
+        return;
+      }
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const data = await response.json();
       setCurrentAnimation(data.animation);
