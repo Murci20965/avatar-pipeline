@@ -5,6 +5,9 @@ from app.models.schemas import AnimationResponse
 
 client = Groq(api_key=settings.GROQ_API_KEY)
 
+MODEL = "openai/gpt-oss-20b"
+
+
 def determine_animation_state(user_command: str) -> AnimationResponse:
     print(f"Processing command: '{user_command}'", flush=True)
     
@@ -42,9 +45,14 @@ def determine_animation_state(user_command: str) -> AnimationResponse:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_command}
             ],
-            model="llama-3.3-70b-versatile",
+            # llama-3.3-70b-versatile was retired by Groq for non-enterprise
+            # accounts (2026-08-16); every call failed and fell back to Idle.
+            # gpt-oss-20b is a supported replacement with JSON mode; low
+            # reasoning effort keeps the avatar responsive.
+            model=MODEL,
             response_format={"type": "json_object"},
-            temperature=0.0
+            temperature=0.0,
+            extra_body={"reasoning_effort": "low"},
         )
         
         raw_json = response.choices[0].message.content

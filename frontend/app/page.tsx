@@ -136,7 +136,7 @@ export default function AvatarPipeline() {
 
         {/* AI Logic Box */}
         <div>
-          <h2 className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-3">LLAMA 3.3 LOGIC</h2>
+          <h2 className="text-zinc-500 text-[11px] font-bold uppercase tracking-widest mb-3">AI LOGIC</h2>
           <div className="bg-[#15171b] border border-zinc-800/80 rounded-xl p-4 min-h-[110px] shadow-inner">
             <p className="text-zinc-400 text-[13px] leading-relaxed">
               {explanation}

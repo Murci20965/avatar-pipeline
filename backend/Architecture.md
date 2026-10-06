@@ -31,7 +31,7 @@ graph TD
     end
 
     subgraph "Intelligence: AI Engine"
-        Groq["Groq: Llama-3.3-70b-versatile"]:::external
+        Groq["Groq: gpt-oss-20b (JSON mode)"]:::external
     end
 
     %% Flow Connections
