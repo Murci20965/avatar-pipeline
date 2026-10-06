@@ -36,7 +36,7 @@ graph TD
 
     %% Flow Connections
     Learner -->|"Unstructured Command<br/>'Give me a thumbs up'"| UI
-    UI -->|"POST {text: ...}"| API
+    UI -->|"POST {command: ...}"| API
     
     API -->|"Context + Literal Constraints"| Prompt
     Prompt -->|"JSON Request"| Groq
@@ -82,7 +82,7 @@ currentAction.reset().fadeIn(0.5).play(). This smoothly interpolates bone weight
 
 **Challenge:** Python 3.14 and Pydantic v2 have specific C-extensions that can behave differently on Windows vs. Linux.
 
-**Solution:** A **multi-stage Docker build** using python:3.14-slim. This ensures the API environment is immutable and identical from Murci’s local machine to the final HuggingFace/NexEra cloud deployment.
+**Solution:** A single-stage Docker image on python:3.14-slim, so the Python runtime and its C-extensions are the same on every machine. During development the source is bind-mounted into the container (the image installs dependencies only). Copying the source into the image and dropping `--reload` from its start command is the next step toward an immutable production image.
 
 ### **D. State Synchronization & Auto-Reset**
 
