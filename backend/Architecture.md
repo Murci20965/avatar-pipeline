@@ -82,7 +82,7 @@ currentAction.reset().fadeIn(0.5).play(). This smoothly interpolates bone weight
 
 **Challenge:** Python 3.14 and Pydantic v2 have specific C-extensions that can behave differently on Windows vs. Linux.
 
-**Solution:** A single-stage Docker image on python:3.14-slim, so the Python runtime and its C-extensions are the same on every machine. During development the source is bind-mounted into the container (the image installs dependencies only). Copying the source into the image and dropping `--reload` from its start command is the next step toward an immutable production image.
+**Solution:** A single-stage Docker image on python:3.14-slim, so the Python runtime and its C-extensions are the same on every machine. The image copies the application and runs uvicorn without `--reload`, so it runs on its own (HuggingFace Spaces included); `.dockerignore` keeps `.env` and local clutter out of it, and the key is passed at run time.
 
 ### **D. State Synchronization & Auto-Reset**
 

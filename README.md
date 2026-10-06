@@ -50,10 +50,10 @@ To maintain a strict Separation of Concerns, the API and the UI must be run conc
 3. **Run via Docker (Recommended):**
    ```bash
    docker build -t avatar-backend .
-   docker run -p 7860:7860 -v "${PWD}:/app" --name avatar-director avatar-backend
+   docker run -p 7860:7860 --env-file .env --name avatar-director avatar-backend
    ```
-   The `-v` mount is required: the image installs the dependencies, and the mount supplies the
-   source code and your `.env`.
+   The image contains the app; `--env-file` passes your key at run time (`.dockerignore` keeps
+   `.env` out of the image). Add `-v "${PWD}:/app"` only if you want live edits while developing.
 
 **Manual Run (Alternative):**
 ```bash

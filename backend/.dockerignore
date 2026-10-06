@@ -1,0 +1,9 @@
+# Never bake secrets or local clutter into the image
+.env
+.env.*
+__pycache__/
+*.pyc
+venv/
+.venv/
+tests/
+.pytest_cache/
